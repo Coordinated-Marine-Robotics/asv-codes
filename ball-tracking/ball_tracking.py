@@ -7,7 +7,7 @@ from collections import deque
 import numpy as np
 import argparse
 import imutils
-import picamera
+from picamera import PiCamera()
 import cv2
 
 # construct the argument parse and parse the arguments
@@ -28,7 +28,7 @@ pts = deque(maxlen=args["buffer"])
 # if a video path was not supplied, grab the reference
 # to the webcam
 if not args.get("video", False):
-	camera = cv2.VideoCapture(0)
+	camera = PiCamera()
 
 # otherwise, grab a reference to the video file
 else:
