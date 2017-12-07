@@ -7,7 +7,7 @@ from collections import deque
 import numpy as np
 import argparse
 import imutils
-from picamera import PiCamera()
+from picamera import PiCamera
 import cv2
 
 # construct the argument parse and parse the arguments
