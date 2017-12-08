@@ -1,3 +1,5 @@
+# From https://pastebin.com/nrh2xNNT
+
 import picamera
 import cv2
 import cv2 as cv
