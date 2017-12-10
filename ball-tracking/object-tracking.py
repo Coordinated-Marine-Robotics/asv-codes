@@ -1,18 +1,29 @@
 # From https://pastebin.com/nrh2xNNT
 
-import picamera
+from imutils.video import VideoStream
+import datetime
+import argparse
+import imutils
+import time
 import cv2
 import cv2 as cv
 import numpy as np
 
 kernel = np.ones((5,5),np.uint8)
 
-# Take input from webcam
-cap = cv2.VideoCapture(0)
+# construct the argument parse and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-p", "--picamera", type=int, default=-1,
+    help="whether or not the Raspberry Pi camera should be used")
+args = vars(ap.parse_args())
+
+# initialize the video stream and allow the cammera sensor to warmup
+vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
+time.sleep(2.0)
 
 # Reduce the size of video to 320x240 so rpi can process faster
-cap.set(3,320)
-cap.set(4,240)
+vs.set(3,320)
+vs.set(4,240)
 
 def nothing(x):
     pass
@@ -47,7 +58,7 @@ cv2.createTrackbar('vmax', 'ValComp',255,255,nothing)
 while(1):
 
     buzz = 0
-    _, frame = cap.read()
+    _, frame = vs.read()
 
     #converting to HSV
     hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
@@ -109,10 +120,10 @@ while(1):
     cv2.imshow('closing',closing)
     cv2.imshow('tracking',frame)
 
-    k = cv2.waitKey(5) & 0xFF
-    if k == 27:
+    key = cv2.waitKey(5) & 0xFF
+    if key == ord("q"):
         break
 
-cap.release()
+vs.release()
 
 cv2.destroyAllWindows()
