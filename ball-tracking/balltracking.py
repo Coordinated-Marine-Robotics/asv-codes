@@ -1,28 +1,15 @@
-# From https://pastebin.com/nrh2xNNT
-
-from imutils.video import VideoStream
-import datetime
-import argparse
-import imutils
-import time
 import cv2
-import cv2 as cv
+import cv2.cv as cv
 import numpy as np
 
 kernel = np.ones((5,5),np.uint8)
 
-# construct the argument parse and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--picamera", type=int, default=-1,
-    help="whether or not the Raspberry Pi camera should be used")
-args = vars(ap.parse_args())
-
-# initialize the video stream and allow the cammera sensor to warmup
-vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
-time.sleep(2.0)
+# Take input from webcam
+cap = cv2.VideoCapture(-1)
 
 # Reduce the size of video to 320x240 so rpi can process faster
-_, frame = imutils.resize(frame, width=400)
+cap.set(3,320)
+cap.set(4,240)
 
 def nothing(x):
     pass
@@ -57,7 +44,7 @@ cv2.createTrackbar('vmax', 'ValComp',255,255,nothing)
 while(1):
 
     buzz = 0
-    _, frame = vs.read()
+    _, frame = cap.read()
 
     #converting to HSV
     hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
@@ -89,9 +76,8 @@ while(1):
     closing = cv2.GaussianBlur(closing,(5,5),0)
 
     # Detect circles using HoughCircles
-    circles = cv2.HoughCircles(closing,cv2.HOUGH_GRADIENT,2,120,param1=120,param2=50,minRadius=10,maxRadius=0)
+    circles = cv2.HoughCircles(closing,cv.CV_HOUGH_GRADIENT,2,120,param1=120,param2=50,minRadius=10,maxRadius=0)
     # circles = np.uint16(np.around(circles))
-    
 
     #Draw Circles
     if circles is not None:
@@ -119,10 +105,10 @@ while(1):
     cv2.imshow('closing',closing)
     cv2.imshow('tracking',frame)
 
-    key = cv2.waitKey(5) & 0xFF
-    if key == ord("q"):
+    k = cv2.waitKey(5) & 0xFF
+    if k == 27:
         break
 
-vs.release()
+cap.release()
 
 cv2.destroyAllWindows()
