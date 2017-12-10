@@ -16,6 +16,8 @@ import cv2
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--picamera", type=int, default=-1,
 	help="whether or not the Raspberry Pi camera should be used")
+ap.add_argument("-b", "--buffer", type=int, default=64,
+	help="max buffer size")
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the "green"
