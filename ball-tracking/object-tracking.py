@@ -21,9 +21,6 @@ args = vars(ap.parse_args())
 vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
 time.sleep(2.0)
 
-# Reduce the size of video to 320x240 so rpi can process faster
-_, frame = imutils.resize(frame, width=400)
-
 def nothing(x):
     pass
 # Creating a windows for later use
@@ -57,7 +54,10 @@ cv2.createTrackbar('vmax', 'ValComp',255,255,nothing)
 while(1):
 
     buzz = 0
-    _, frame = vs.read()
+    frame = vs.read()
+
+    # Reduce the size of video so rpi can process faster
+    frame= imutils.resize(frame, width=400)
 
     #converting to HSV
     hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
