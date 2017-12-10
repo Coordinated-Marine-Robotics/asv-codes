@@ -35,7 +35,7 @@ firstFrame = None
 while True:
 	# grab the current frame and initialize the occupied/unoccupied
 	# text
-	(grabbed, frame) = vs.read()
+	frame = vs.read()
 	text = "Unoccupied"
 
 	# if the frame could not be grabbed, then we have reached the end
