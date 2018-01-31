@@ -4,7 +4,6 @@
 # python motion_detector.py --video videos/example_01.mp4
 
 # import the necessary packages
-from imutils.video import VideoStream
 import argparse
 import datetime
 import imutils
@@ -15,18 +14,16 @@ import cv2
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-ap.add_argument("-p", "--picamera", type=int, default=-1,
-	help="whether or not the Raspberry Pi camera should be used")
 args = vars(ap.parse_args())
 
 # if the video argument is None, then we are reading from webcam
 if args.get("video", None) is None:
-	vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
-	time.sleep(2.0)
+	camera = cv2.VideoCapture(0)
+	time.sleep(0.25)
 
 # otherwise, we are reading from a video file
 else:
-	vs = cv2.VideoCapture(args["video"])
+	camera = cv2.VideoCapture(args["video"])
 
 # initialize the first frame in the video stream
 firstFrame = None
@@ -35,8 +32,13 @@ firstFrame = None
 while True:
 	# grab the current frame and initialize the occupied/unoccupied
 	# text
-	frame = vs.read()
+	(grabbed, frame) = camera.read()
 	text = "Unoccupied"
+
+	# if the frame could not be grabbed, then we have reached the end
+	# of the video
+	if not grabbed:
+		break
 
 	# resize the frame, convert it to grayscale, and blur it
 	frame = imutils.resize(frame, width=500)
@@ -88,5 +90,5 @@ while True:
 		break
 
 # cleanup the camera and close any open windows
+camera.release()
 cv2.destroyAllWindows()
-vs.stop()
