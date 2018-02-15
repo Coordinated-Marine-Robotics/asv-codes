@@ -43,9 +43,23 @@ if found == 1:	#if object is detected
 	for i in range(N):
 		if ASV_list[i] == ON:	#Checks which ASV is online
 			online.append(ASV_list[i])	#Adds online ASV to the array
-			ASV = online[0]	#Set the first online ASV of the element as the first ASV 
-			if heading != North:
-				mvRight()
+			ASV1 = online[0]	#Set the first online ASV of the element as the first ASV 
+			ASV2 = online[1]	#Set the second online ASV of the element as the second ASV
+			#Sets the first ASV South of the object
+			if heading.ASV1 != North:	#If first ASV is not facing north
+				if x.ASV1 < x.ASV2:	#Checks to see whether the second ASV is to the left or right of the first ASV
+					mvLeft()	#and moves in the opposite direction to avoid collision
+				else:
+					mvRight()
+			#Sets the second ASV north of the object
+			if heading.ASV2 != South:	#If second ASV is not facing south (opposite of first ASV) 
+				if x.ASV2 < x.ASV1:	#Checks to see whether first ASV is to the left or right of the second ASV
+					mvLeft()	#and moves in opposite direction to avoid 
+				else:
+					mvRight()
+			middle.Object = ((y.ASV1 - y.ASV2)/2) - 2*target_distance
+					
+
 
 
 #Positioning additional ASV's based on the relative angle to the first ASV
@@ -54,6 +68,20 @@ if found == 1:	#if object is detected
 			Dpy = y(i+1) - y(1)	#Difference in y-coordinates between ASV 0 and ASV i'th
 			Dpx = x(i+1) - x(1)	#Difference in x-coordinates between ASV 0 and ASV i'th 
 			angle = 180/N 	#Equal angle needed between ASV's
+			phi = (N-i)*angle	#Required angle between first ASV and i'th ASV
+			theta = atan2(Dpy,Dpx)	#Current angle between ASV 0 and ASV i'th based on their x-y coordinates
+			if theta<phi:	#if current angle is smaller than the required angle
+				mvRight()	#move right 
+			else:
+				mvLeft()	#move left if angle is greater than required angle 
+
+
+#Positioning additional ASV's based on the relative angle to the middle of object
+	if ASV != online[0:2]:	#if current ASV is not ASV 0 (ASV 2 or others)
+		for i in online[2:]:	#N is number of ASV
+			Dpy = y(i+1) - middle.Object	#Difference in y-coordinates between ASV 0 and ASV i'th
+			Dpx = x(i+1) - x(1)	#Difference in x-coordinates between ASV 0 and ASV i'th 
+			angle = 360/N 	#Equal angle needed between ASV's
 			phi = (N-i)*angle	#Required angle between first ASV and i'th ASV
 			theta = atan2(Dpy,Dpx)	#Current angle between ASV 0 and ASV i'th based on their x-y coordinates
 			if theta<phi:	#if current angle is smaller than the required angle

@@ -11,3 +11,6 @@ for j in a:
 	print(ASV_list)
 
 print random.randint(0,N)
+
+a = [1,2,3,4]
+print(a[0:2])
