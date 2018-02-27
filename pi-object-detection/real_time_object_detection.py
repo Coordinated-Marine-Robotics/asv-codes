@@ -82,6 +82,8 @@ while True:
 			y = startY - 15 if startY - 15 > 15 else startY + 15
 			cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
+			cv2.circle(frame, center, radius=1, color=red, thickness=-1,
+				lineType=8, shift=0)
 
 	# show the output frame
 	cv2.imshow("Frame", frame)
