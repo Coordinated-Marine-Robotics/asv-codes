@@ -1,9 +1,9 @@
 import socket
 
-UDP_IP = "change to RPI's PI"	#RPI's IP Address
+UDP_IP = '192.168.0.18'	#RPI's IP Address
 UDP_PORT = 5005
 
-sock = socket.socket(socket.AFK_INET, socket.SOCK_DGRAM) #Internet and UDP
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #Internet and UDP
 sock.bind(MESSAGE, (UDP_IP, UDP_PORT))
 
 while True:
