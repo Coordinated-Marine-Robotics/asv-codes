@@ -121,10 +121,10 @@ while True:
         rollrate = round(math.degrees(Gyro[0]), 1)
         pitchrate = round(math.degrees(Gyro[1]), 1)
         yawrate = round(math.degrees(Gyro[2]), 1)
-    if yaw < 0.1:
+        if yaw < 0.1:
             yaw = yaw + 360
-    if yaw > 360:
-	    yaw = yaw - 360
+        if yaw > 360:
+	        yaw = yaw - 360
     
         # Dampening functions
         roll_total = roll_total - roll_run[t_one]
